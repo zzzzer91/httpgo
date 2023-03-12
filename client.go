@@ -19,6 +19,7 @@ type Header struct {
 	Val string
 }
 
+// NewClient create a new httpgo client, if transport is nil, the client uses `http.DefaultTransport`.
 func NewClient(timeout time.Duration, transport http.RoundTripper) *Client {
 	return &Client{
 		c: &http.Client{
