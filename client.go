@@ -39,7 +39,7 @@ func (c *Client) Request(method, url string, body []byte, headers ...Header) (*h
 	}
 	resp, err := c.c.Do(req)
 	if err != nil {
-		return nil, errors.Wrap(err, "defaultClient.NewRequest error")
+		return nil, errors.Wrap(err, "send request error")
 	}
 	if resp.StatusCode != http.StatusOK {
 		bs, _ := io.ReadAll(resp.Body)
