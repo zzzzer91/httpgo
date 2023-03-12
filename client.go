@@ -59,6 +59,10 @@ func (c *Client) Put(url string, body []byte, headers ...Header) (*http.Response
 	return c.Request("PUT", url, body, headers...)
 }
 
+func (c *Client) Delete(url string, headers ...Header) (*http.Response, error) {
+	return c.Request("DELETE", url, nil, headers...)
+}
+
 func (c *Client) GetJSON(url string, headers ...Header) (*http.Response, error) {
 	headers = append(headers, Header{"Content-Type", contentTypeJSON})
 	return c.Get(url, headers...)
@@ -92,4 +96,12 @@ func (c *Client) PutJSON(url string, data interface{}, headers ...Header) (*http
 
 func (c *Client) PutJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
 	return c.PutJSON(url, data, append(headers, Header{"Authorization", token})...)
+}
+
+func (c *Client) DeleteJSON(url string, headers ...Header) (*http.Response, error) {
+	return c.Delete(url, append(headers, Header{"Content-Type", contentTypeJSON})...)
+}
+
+func (c *Client) DeleteJsonWithAuth(url string, token string, headers ...Header) (*http.Response, error) {
+	return c.DeleteJSON(url, append(headers, Header{"Authorization", token})...)
 }
