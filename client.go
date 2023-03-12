@@ -47,6 +47,19 @@ func (c *Client) Request(method, url string, body []byte, headers ...Header) (*h
 	return resp, nil
 }
 
+func (c *Client) RequestJSON(method, url string, data interface{}, headers ...Header) (*http.Response, error) {
+	headers = append(headers, Header{"Content-Type", contentTypeJSON})
+	var body []byte
+	if data != nil {
+		var err error
+		body, err = json.Marshal(data)
+		if err != nil {
+			return nil, errors.Wrap(err, "json.Marshal error")
+		}
+	}
+	return c.Request(method, url, body, headers...)
+}
+
 func (c *Client) Get(url string, headers ...Header) (*http.Response, error) {
 	return c.Request("GET", url, nil, headers...)
 }
@@ -64,42 +77,31 @@ func (c *Client) Delete(url string, headers ...Header) (*http.Response, error) {
 }
 
 func (c *Client) GetJSON(url string, headers ...Header) (*http.Response, error) {
-	headers = append(headers, Header{"Content-Type", contentTypeJSON})
-	return c.Get(url, headers...)
+	return c.RequestJSON("GET", url, nil, headers...)
+}
+
+func (c *Client) PostJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
+	return c.RequestJSON("POST", url, data, headers...)
+}
+
+func (c *Client) PutJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
+	return c.RequestJSON("PUT", url, data, headers...)
+}
+
+func (c *Client) DeleteJSON(url string, headers ...Header) (*http.Response, error) {
+	return c.RequestJSON("DELETE", url, nil, headers...)
 }
 
 func (c *Client) GetJsonWithAuth(url string, token string, headers ...Header) (*http.Response, error) {
 	return c.GetJSON(url, append(headers, Header{"Authorization", token})...)
 }
 
-func (c *Client) PostJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
-	headers = append(headers, Header{"Content-Type", contentTypeJSON})
-	jdByte, err := json.Marshal(data)
-	if err != nil {
-		return nil, errors.Wrap(err, "json.Marshal error")
-	}
-	return c.Post(url, jdByte, headers...)
-}
-
 func (c *Client) PostJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
 	return c.PostJSON(url, data, append(headers, Header{"Authorization", token})...)
 }
 
-func (c *Client) PutJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
-	headers = append(headers, Header{"Content-Type", contentTypeJSON})
-	jdByte, err := json.Marshal(data)
-	if err != nil {
-		return nil, errors.Wrap(err, "json.Marshal error")
-	}
-	return c.Put(url, jdByte, headers...)
-}
-
 func (c *Client) PutJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
 	return c.PutJSON(url, data, append(headers, Header{"Authorization", token})...)
-}
-
-func (c *Client) DeleteJSON(url string, headers ...Header) (*http.Response, error) {
-	return c.Delete(url, append(headers, Header{"Content-Type", contentTypeJSON})...)
 }
 
 func (c *Client) DeleteJsonWithAuth(url string, token string, headers ...Header) (*http.Response, error) {

@@ -13,6 +13,10 @@ func Request(method, url string, body []byte, headers ...Header) (*http.Response
 	return defaultClient.Request(method, url, body, headers...)
 }
 
+func RequestJSON(method, url string, data interface{}, headers ...Header) (*http.Response, error) {
+	return defaultClient.RequestJSON(method, url, data, headers...)
+}
+
 func Get(url string, headers ...Header) (*http.Response, error) {
 	return defaultClient.Get(url, headers...)
 }
@@ -33,28 +37,28 @@ func GetJSON(url string, headers ...Header) (*http.Response, error) {
 	return defaultClient.GetJSON(url, headers...)
 }
 
-func GetJsonWithAuth(url string, token string, headers ...Header) (*http.Response, error) {
-	return defaultClient.GetJsonWithAuth(url, token, headers...)
-}
-
 func PostJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
 	return defaultClient.PostJSON(url, data, headers...)
-}
-
-func PostJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
-	return defaultClient.PostJsonWithAuth(url, data, token, headers...)
 }
 
 func PutJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
 	return defaultClient.PutJSON(url, data, headers...)
 }
 
-func PutJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
-	return defaultClient.PutJsonWithAuth(url, data, token, headers...)
-}
-
 func DeleteJSON(url string, headers ...Header) (*http.Response, error) {
 	return defaultClient.DeleteJSON(url, headers...)
+}
+
+func GetJsonWithAuth(url string, token string, headers ...Header) (*http.Response, error) {
+	return defaultClient.GetJsonWithAuth(url, token, headers...)
+}
+
+func PostJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
+	return defaultClient.PostJsonWithAuth(url, data, token, headers...)
+}
+
+func PutJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
+	return defaultClient.PutJsonWithAuth(url, data, token, headers...)
 }
 
 func DeleteJsonWithAuth(url string, token string, headers ...Header) (*http.Response, error) {
