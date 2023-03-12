@@ -29,22 +29,22 @@ func GetJSON(url string, headers ...Header) (*http.Response, error) {
 	return defaultClient.GetJSON(url, headers...)
 }
 
-func GetJsonWithAuth(url string, token string) (*http.Response, error) {
-	return defaultClient.GetJsonWithAuth(url, token)
+func GetJsonWithAuth(url string, token string, headers ...Header) (*http.Response, error) {
+	return defaultClient.GetJsonWithAuth(url, token, headers...)
 }
 
 func PostJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
 	return defaultClient.PostJSON(url, data, headers...)
 }
 
-func PostJsonWithAuth(url string, data interface{}, token string) (*http.Response, error) {
-	return defaultClient.PostJsonWithAuth(url, data, token)
+func PostJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
+	return defaultClient.PostJsonWithAuth(url, data, token, headers...)
 }
 
 func PutJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
 	return defaultClient.PutJSON(url, data, headers...)
 }
 
-func PutJsonWithAuth(url string, data interface{}, token string) (*http.Response, error) {
-	return defaultClient.PutJsonWithAuth(url, data, token)
+func PutJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
+	return defaultClient.PutJsonWithAuth(url, data, token, headers...)
 }

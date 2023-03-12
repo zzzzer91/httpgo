@@ -64,8 +64,8 @@ func (c *Client) GetJSON(url string, headers ...Header) (*http.Response, error) 
 	return c.Get(url, headers...)
 }
 
-func (c *Client) GetJsonWithAuth(url string, token string) (*http.Response, error) {
-	return c.GetJSON(url, Header{"Authorization", token})
+func (c *Client) GetJsonWithAuth(url string, token string, headers ...Header) (*http.Response, error) {
+	return c.GetJSON(url, append(headers, Header{"Authorization", token})...)
 }
 
 func (c *Client) PostJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
@@ -77,8 +77,8 @@ func (c *Client) PostJSON(url string, data interface{}, headers ...Header) (*htt
 	return c.Post(url, jdByte, headers...)
 }
 
-func (c *Client) PostJsonWithAuth(url string, data interface{}, token string) (*http.Response, error) {
-	return c.PostJSON(url, data, Header{"Authorization", token})
+func (c *Client) PostJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
+	return c.PostJSON(url, data, append(headers, Header{"Authorization", token})...)
 }
 
 func (c *Client) PutJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
@@ -90,6 +90,6 @@ func (c *Client) PutJSON(url string, data interface{}, headers ...Header) (*http
 	return c.Put(url, jdByte, headers...)
 }
 
-func (c *Client) PutJsonWithAuth(url string, data interface{}, token string) (*http.Response, error) {
-	return c.PutJSON(url, data, Header{"Authorization", token})
+func (c *Client) PutJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
+	return c.PutJSON(url, data, append(headers, Header{"Authorization", token})...)
 }
