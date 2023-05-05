@@ -2,6 +2,7 @@ package httpgo
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -29,8 +30,8 @@ func NewClient(timeout time.Duration, transport http.RoundTripper) *Client {
 	}
 }
 
-func (c *Client) Request(method, url string, body []byte, headers ...Header) (*http.Response, error) {
-	req, err := http.NewRequest(method, url, bytes.NewReader(body))
+func (c *Client) Request(ctx context.Context, method, url string, body []byte, headers ...Header) (*http.Response, error) {
+	req, err := http.NewRequestWithContext(ctx, method, url, bytes.NewReader(body))
 	if err != nil {
 		return nil, errors.Wrap(err, "http.NewRequest error")
 	}
@@ -48,7 +49,7 @@ func (c *Client) Request(method, url string, body []byte, headers ...Header) (*h
 	return resp, nil
 }
 
-func (c *Client) RequestJSON(method, url string, data interface{}, headers ...Header) (*http.Response, error) {
+func (c *Client) RequestJSON(ctx context.Context, method, url string, data interface{}, headers ...Header) (*http.Response, error) {
 	headers = append(headers, Header{"Content-Type", contentTypeJSON})
 	var body []byte
 	if data != nil {
@@ -58,53 +59,53 @@ func (c *Client) RequestJSON(method, url string, data interface{}, headers ...He
 			return nil, errors.Wrap(err, "json.Marshal error")
 		}
 	}
-	return c.Request(method, url, body, headers...)
+	return c.Request(ctx, method, url, body, headers...)
 }
 
-func (c *Client) Get(url string, headers ...Header) (*http.Response, error) {
-	return c.Request("GET", url, nil, headers...)
+func (c *Client) Get(ctx context.Context, url string, headers ...Header) (*http.Response, error) {
+	return c.Request(ctx, "GET", url, nil, headers...)
 }
 
-func (c *Client) Post(url string, body []byte, headers ...Header) (*http.Response, error) {
-	return c.Request("POST", url, body, headers...)
+func (c *Client) Post(ctx context.Context, url string, body []byte, headers ...Header) (*http.Response, error) {
+	return c.Request(ctx, "POST", url, body, headers...)
 }
 
-func (c *Client) Put(url string, body []byte, headers ...Header) (*http.Response, error) {
-	return c.Request("PUT", url, body, headers...)
+func (c *Client) Put(ctx context.Context, url string, body []byte, headers ...Header) (*http.Response, error) {
+	return c.Request(ctx, "PUT", url, body, headers...)
 }
 
-func (c *Client) Delete(url string, headers ...Header) (*http.Response, error) {
-	return c.Request("DELETE", url, nil, headers...)
+func (c *Client) Delete(ctx context.Context, url string, headers ...Header) (*http.Response, error) {
+	return c.Request(ctx, "DELETE", url, nil, headers...)
 }
 
-func (c *Client) GetJSON(url string, headers ...Header) (*http.Response, error) {
-	return c.RequestJSON("GET", url, nil, headers...)
+func (c *Client) GetJSON(ctx context.Context, url string, headers ...Header) (*http.Response, error) {
+	return c.RequestJSON(ctx, "GET", url, nil, headers...)
 }
 
-func (c *Client) PostJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
-	return c.RequestJSON("POST", url, data, headers...)
+func (c *Client) PostJSON(ctx context.Context, url string, data interface{}, headers ...Header) (*http.Response, error) {
+	return c.RequestJSON(ctx, "POST", url, data, headers...)
 }
 
-func (c *Client) PutJSON(url string, data interface{}, headers ...Header) (*http.Response, error) {
-	return c.RequestJSON("PUT", url, data, headers...)
+func (c *Client) PutJSON(ctx context.Context, url string, data interface{}, headers ...Header) (*http.Response, error) {
+	return c.RequestJSON(ctx, "PUT", url, data, headers...)
 }
 
-func (c *Client) DeleteJSON(url string, headers ...Header) (*http.Response, error) {
-	return c.RequestJSON("DELETE", url, nil, headers...)
+func (c *Client) DeleteJSON(ctx context.Context, url string, headers ...Header) (*http.Response, error) {
+	return c.RequestJSON(ctx, "DELETE", url, nil, headers...)
 }
 
-func (c *Client) GetJsonWithAuth(url string, token string, headers ...Header) (*http.Response, error) {
-	return c.GetJSON(url, append(headers, Header{"Authorization", token})...)
+func (c *Client) GetJsonWithAuth(ctx context.Context, url string, token string, headers ...Header) (*http.Response, error) {
+	return c.GetJSON(ctx, url, append(headers, Header{"Authorization", token})...)
 }
 
-func (c *Client) PostJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
-	return c.PostJSON(url, data, append(headers, Header{"Authorization", token})...)
+func (c *Client) PostJsonWithAuth(ctx context.Context, url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
+	return c.PostJSON(ctx, url, data, append(headers, Header{"Authorization", token})...)
 }
 
-func (c *Client) PutJsonWithAuth(url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
-	return c.PutJSON(url, data, append(headers, Header{"Authorization", token})...)
+func (c *Client) PutJsonWithAuth(ctx context.Context, url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
+	return c.PutJSON(ctx, url, data, append(headers, Header{"Authorization", token})...)
 }
 
-func (c *Client) DeleteJsonWithAuth(url string, token string, headers ...Header) (*http.Response, error) {
-	return c.DeleteJSON(url, append(headers, Header{"Authorization", token})...)
+func (c *Client) DeleteJsonWithAuth(ctx context.Context, url string, token string, headers ...Header) (*http.Response, error) {
+	return c.DeleteJSON(ctx, url, append(headers, Header{"Authorization", token})...)
 }
