@@ -78,6 +78,22 @@ func (c *Client) Delete(ctx context.Context, url string, headers ...Header) (*ht
 	return c.Request(ctx, "DELETE", url, nil, headers...)
 }
 
+func (c *Client) GetWithAuth(ctx context.Context, url string, token string, headers ...Header) (*http.Response, error) {
+	return c.Get(ctx, url, append(headers, Header{"Authorization", token})...)
+}
+
+func (c *Client) PostWithAuth(ctx context.Context, url string, token string, body []byte, headers ...Header) (*http.Response, error) {
+	return c.Post(ctx, url, body, append(headers, Header{"Authorization", token})...)
+}
+
+func (c *Client) PutWithAuth(ctx context.Context, url string, token string, body []byte, headers ...Header) (*http.Response, error) {
+	return c.Put(ctx, url, body, append(headers, Header{"Authorization", token})...)
+}
+
+func (c *Client) DeleteWithAuth(ctx context.Context, url string, token string, headers ...Header) (*http.Response, error) {
+	return c.Delete(ctx, url, append(headers, Header{"Authorization", token})...)
+}
+
 func (c *Client) GetJSON(ctx context.Context, url string, headers ...Header) (*http.Response, error) {
 	return c.RequestJSON(ctx, "GET", url, nil, headers...)
 }
@@ -98,11 +114,11 @@ func (c *Client) GetJsonWithAuth(ctx context.Context, url string, token string, 
 	return c.GetJSON(ctx, url, append(headers, Header{"Authorization", token})...)
 }
 
-func (c *Client) PostJsonWithAuth(ctx context.Context, url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
+func (c *Client) PostJsonWithAuth(ctx context.Context, url string, token string, data interface{}, headers ...Header) (*http.Response, error) {
 	return c.PostJSON(ctx, url, data, append(headers, Header{"Authorization", token})...)
 }
 
-func (c *Client) PutJsonWithAuth(ctx context.Context, url string, data interface{}, token string, headers ...Header) (*http.Response, error) {
+func (c *Client) PutJsonWithAuth(ctx context.Context, url string, token string, data interface{}, headers ...Header) (*http.Response, error) {
 	return c.PutJSON(ctx, url, data, append(headers, Header{"Authorization", token})...)
 }
 
