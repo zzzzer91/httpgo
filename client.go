@@ -30,8 +30,8 @@ func NewClient(timeout time.Duration, transport http.RoundTripper) *Client {
 	}
 }
 
-func (c *Client) Request(ctx context.Context, method, url string, body []byte, headers ...Header) (*http.Response, error) {
-	req, err := http.NewRequestWithContext(ctx, method, url, bytes.NewReader(body))
+func (c *Client) Request(ctx context.Context, method, url string, body io.Reader, headers ...Header) (*http.Response, error) {
+	req, err := http.NewRequestWithContext(ctx, method, url, body)
 	if err != nil {
 		return nil, errors.Wrap(err, "http.NewRequest error")
 	}
@@ -60,18 +60,18 @@ func (c *Client) RequestJSON(ctx context.Context, method, url string, data inter
 			return nil, errors.Wrap(err, "json.Marshal error")
 		}
 	}
-	return c.Request(ctx, method, url, body, headers...)
+	return c.Request(ctx, method, url, bytes.NewReader(body), headers...)
 }
 
 func (c *Client) Get(ctx context.Context, url string, headers ...Header) (*http.Response, error) {
 	return c.Request(ctx, "GET", url, nil, headers...)
 }
 
-func (c *Client) Post(ctx context.Context, url string, body []byte, headers ...Header) (*http.Response, error) {
+func (c *Client) Post(ctx context.Context, url string, body io.Reader, headers ...Header) (*http.Response, error) {
 	return c.Request(ctx, "POST", url, body, headers...)
 }
 
-func (c *Client) Put(ctx context.Context, url string, body []byte, headers ...Header) (*http.Response, error) {
+func (c *Client) Put(ctx context.Context, url string, body io.Reader, headers ...Header) (*http.Response, error) {
 	return c.Request(ctx, "PUT", url, body, headers...)
 }
 
@@ -83,11 +83,11 @@ func (c *Client) GetWithAuth(ctx context.Context, url string, token string, head
 	return c.Get(ctx, url, append(headers, Header{"Authorization", token})...)
 }
 
-func (c *Client) PostWithAuth(ctx context.Context, url string, token string, body []byte, headers ...Header) (*http.Response, error) {
+func (c *Client) PostWithAuth(ctx context.Context, url string, token string, body io.Reader, headers ...Header) (*http.Response, error) {
 	return c.Post(ctx, url, body, append(headers, Header{"Authorization", token})...)
 }
 
-func (c *Client) PutWithAuth(ctx context.Context, url string, token string, body []byte, headers ...Header) (*http.Response, error) {
+func (c *Client) PutWithAuth(ctx context.Context, url string, token string, body io.Reader, headers ...Header) (*http.Response, error) {
 	return c.Put(ctx, url, body, append(headers, Header{"Authorization", token})...)
 }
 
