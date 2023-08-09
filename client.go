@@ -45,7 +45,7 @@ func (c *Client) Request(ctx context.Context, method, url string, body []byte, h
 	if resp.StatusCode != http.StatusOK {
 		bs, _ := io.ReadAll(resp.Body)
 		resp.Body.Close()
-		return nil, errors.Errorf("statusCode is %d, resp: %s", resp.StatusCode, bs)
+		return nil, NewStatusError(resp.StatusCode, string(bs))
 	}
 	return resp, nil
 }
