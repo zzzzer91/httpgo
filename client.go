@@ -36,7 +36,7 @@ func (c *Client) Request(ctx context.Context, method, url string, body io.Reader
 		return nil, errors.Wrap(err, "http.NewRequest error")
 	}
 	for _, f := range headers {
-		req.Header.Add(f.Key, f.Val)
+		req.Header.Set(f.Key, f.Val)
 	}
 	resp, err := c.c.Do(req)
 	if err != nil {
